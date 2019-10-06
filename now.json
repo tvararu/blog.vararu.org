@@ -27,6 +27,11 @@
       "src": "/dotfiles/",
       "status": 301,
       "headers": { "Location": "/dotfiles" }
+    },
+    {
+      "src": "/deploying-an-app-with-facebook-login-in-5-minutes/",
+      "status": 301,
+      "headers": { "Location": "/meteor-sso" }
     }
   ]
 }

@@ -1,0 +1,31 @@
+# [blog.vararu.org](/)
+
+## Deploying an app with Facebook Login in 5 minutes
+
+<time dateTime="2015-01-30">30 January 2015</time>
+
+People like to think of certain features as if they're a big deal. Things like "realtime," "native Cordova app" or "Facebook Login."
+
+Frameworks like Meteor can trivialize their implementation. You sacrifice some flexibility, and hide the complexity behind a curtain of "magic." It's not the correct solution for every use case, but boy can it blow people away.
+
+Here's how to build an app with Facebook OAuth-backed user accounts. I've even included the step that installs the whole framework.
+
+```bash
+$ curl https://install.meteor.com/ | sh
+$ meteor create fb
+$ cd fb
+$ meteor add accounts-ui accounts-facebook
+$ meteor
+```
+
+Now just chuck `{{> loginButtons}}` anywhere in your `<body>` template in `fb.html`, and open `http://localhost:3000`.
+
+The only thing that's left now is just standard Facebook App creation. Thankfully, Meteor holds your hand throughout the entire process: the first time you open the app, it'll open a modal and tell you what to do.
+
+And after that, you're set. Later, you can deploy it to the internet with just one command:
+
+```bash
+$ meteor deploy myapp
+```
+
+If you haven't already, [give Meteor a go](https://www.meteor.com/install).
