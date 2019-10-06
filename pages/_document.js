@@ -13,12 +13,8 @@ class NonSpaHead extends Head {
   }
 }
 
-const CustomHead = () => (
-  <NonSpaHead>
-    <meta name="description" content="Theodor Vararu's blog." />
-    <meta property="og:title" content="blog.vararu.org" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://blog.vararu.org" />
+const Favicons = () => (
+  <>
     <link
       rel="apple-touch-icon-precomposed"
       sizes="57x57"
@@ -111,6 +107,25 @@ const CustomHead = () => (
       name="msapplication-square310x310logo"
       content="/static/favicon/mstile-310x310.png"
     />
+  </>
+);
+
+const CustomHead = () => (
+  <NonSpaHead>
+    <meta name="description" content="Theodor Vararu's blog." />
+
+    <link rel="canonical" href="https://blog.vararu.org/" />
+
+    <meta property="og:site_name" content="blog.vararu.org" />
+    <meta property="og:title" content="blog.vararu.org" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://blog.vararu.org" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="blog.vararu.org" />
+    <meta name="twitter:url" content="https://blog.vararu.org/" />
+
+    <Favicons />
   </NonSpaHead>
 );
 
