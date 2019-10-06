@@ -1,8 +1,20 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
+class NonSpaHead extends Head {
+  render() {
+    return (
+      <head {...this.props}>
+        {this.context._documentProps.head}
+        {this.getCssLinks()}
+        {this.context._documentProps.styles || null}
+        {this.props.children}
+      </head>
+    );
+  }
+}
+
 const CustomHead = () => (
-  <Head>
-    <meta name="viewport" content="width=device-width, minimum-scale=1" />
+  <NonSpaHead>
     <meta name="description" content="Theodor Vararu's blog." />
     <meta property="og:title" content="blog.vararu.org" />
     <meta property="og:type" content="website" />
@@ -99,7 +111,7 @@ const CustomHead = () => (
       name="msapplication-square310x310logo"
       content="/static/favicon/mstile-310x310.png"
     />
-  </Head>
+  </NonSpaHead>
 );
 
 class MyDocument extends Document {
@@ -114,7 +126,6 @@ class MyDocument extends Document {
         <CustomHead />
         <body>
           <Main />
-          <NextScript />
         </body>
       </Html>
     );
