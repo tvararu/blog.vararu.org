@@ -57,6 +57,11 @@
       "src": "/yak-shaving-ghost/",
       "status": 301,
       "headers": { "Location": "/yak-shaving-ghost" }
+    },
+    {
+      "src": "/whats-webvr-good-for-even/",
+      "status": 301,
+      "headers": { "Location": "/why-webvr" }
     }
   ]
 }
