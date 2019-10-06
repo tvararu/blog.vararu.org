@@ -22,6 +22,11 @@
       "src": "/webgl-cloth-implemented-in-famo-us/",
       "status": 301,
       "headers": { "Location": "/famous-cloth" }
+    },
+    {
+      "src": "/dotfiles/",
+      "status": 301,
+      "headers": { "Location": "/dotfiles" }
     }
   ]
 }
