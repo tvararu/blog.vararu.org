@@ -1,0 +1,89 @@
+# [blog.vararu.org](/)
+
+## Creating a Ghost in the Shell screensaver for macOS
+
+<time dateTime="2017-06-25">25 June 2017</time>
+
+Ghost in the Shell (1998) has a brief interlude containing [gorgeously drawn scenes](https://www.youtube.com/watch?v=gXTnl1FVFBw) of a dystopian city modelled after Hong Kong.
+
+I've wanted to create a screen saver that loops this scene over and over for a while, and I finally got around to doing it.
+
+My first idea was to fork [JohnCoates/Aerial](https://github.com/JohnCoates/Aerial) and repurpose it for this. But I stumbled on [SaveHollywood](http://s.sudre.free.fr/Software/SaveHollywood/about.html), which is a macOS screensaver that allows you to supply any custom video(s) to play. So that was a significant chunk of work done.
+
+Producing the video turned out to be tricker than I initially thought. I first scrubbed my copy of GitS to find the exact timestamps for the scenes that I want to export:
+
+```bash
+33:04 to 33:53
+34:04 to 36:20
+```
+
+I wrote a quick `ffmpeg` invocation to slice it:
+
+```bash
+ffmpeg -i ghost-full.mp4 -ss "00:33:04" -to "00:33:53" -c copy ghost-1.mp4
+```
+
+But the resulting video didn't work correctly. It had a few seconds of no output in the beginning. I found out that this was because of a concept called "index keyframes", or `i-frames`, which for this task were the only frames that I could crop from without re-encoding and without exporting gaps. Re-encoding has the potential to introduce a loss of quality which is something I wanted to avoid.
+
+Finding the `i-frames` can be done with a tool that is part of the `ffmpeg` `brew` distribution, `ffprobe`:
+
+```bash
+ffprobe -select_streams v -show_frames \
+-show_entries frame=pict_type \
+-of csv ghost-full.mp4 > ghost-frames.csv
+```
+
+This will output the full list of frames to a `ghost-frames.csv` file. To get the `i-frames`:
+
+```bash
+cat ghost-frames.csv | grep -n I | cut -d ':' -f 1 > ghost-i-frames.csv
+```
+
+Then you can peek around `vim i-frames.csv` to see the exact frame numbers. However, what I knew was the timestamp, `00:33:04`, not the frame number.
+
+The timestamp in seconds is:
+
+```bash
+33 * 60 + 4 = 1984
+```
+
+To get the frame, you multiply by the framerate. To get the framerate:
+
+```bash
+ffprobe -v 0 -of compact=p=0 -select_streams 0 \
+-show_entries stream=r_frame_rate ghost-full.mp4
+```
+
+Which returns `24000/1001`, which is `23.976023976`. The former is better for arithmetic, so:
+
+```bash
+1984 * (24000 / 1001) = 47568.431568432
+```
+
+So I needed an `i-frame` somewhere around frame `47568`. Browsing `i-frames.csv` I settled on `47556`, but after some trial and error I found the right one to be at the `00:33:02.898` timestamp.
+
+Apply the same process to the end section for my first clip and to both start and end of my second clip, and I got:
+
+```bash
+ffmpeg -i ghost-full.mp4 -ss "00:33:02.898" -to "00:33:52.905" -c copy ghost-1.mp4
+ffmpeg -i ghost-full.mp4 -ss "00:34:03.500" -to "00:36:19.969" -c copy ghost-2.mp4
+```
+
+Plugging these into `SaveHollywood` produced great results, but the transition between the two videos did include a half-second of a black screen, which was slightly jarring. So I concatenated them:
+
+```bash
+$ cat filelist.txt
+file 'ghost-1.mp4'
+file 'ghost-2.mp4'
+$ ffmpeg -f concat -safe 0 -i filelist.txt -c copy ghost-concat.mp4
+```
+
+And now I had what I set out to do, but I felt that it could also do with [some different music](https://youtu.be/GvaC6cIrntI?t=10m37s). I downloaded the OST from YouTube using `youtube-dl`, plugged it into Audacity, and exported a crop of the soundtrack that I wanted to use. Then finally:
+
+```bash
+ffmpeg -i ghost-concat.mp4 -i ghost-audio.mp3 -codec copy -shortest ghost-saver.mov
+```
+
+I had to export the final version as `.mov` to get the sound to play in QuickLook/QuickTime/SaveHollywood.
+
+And that's it.
