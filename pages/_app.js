@@ -29,7 +29,8 @@ export default class MyApp extends App {
             color: #192a56;
           }
 
-          ul {
+          ul,
+          ol {
             padding-left: 1.25rem;
           }
 
@@ -40,12 +41,23 @@ export default class MyApp extends App {
             color: #ffffff;
             margin: 0 -1rem;
           }
+
+          blockquote {
+            margin-left: 0;
+            padding: 1px 0rem 0.1rem 1rem;
+            border-left: solid 0.5rem #2f3640;
+          }
+
+          footer {
+            margin: 2rem 0;
+          }
         `}</style>
         <main>
           <h1>
             <a href="/">blog.vararu.org</a>
           </h1>
           <Component {...pageProps} />
+          <footer />
         </main>
       </>
     );
