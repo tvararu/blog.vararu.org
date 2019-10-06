@@ -7,6 +7,11 @@
       "src": "/adding-pushstate-support-mean-seo/",
       "status": 301,
       "headers": { "Location": "/mean-seo" }
+    },
+    {
+      "src": "/github-student-developer-pack/",
+      "status": 301,
+      "headers": { "Location": "/github-pack" }
     }
   ]
 }
