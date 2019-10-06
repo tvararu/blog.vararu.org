@@ -12,6 +12,11 @@
       "src": "/github-student-developer-pack/",
       "status": 301,
       "headers": { "Location": "/github-pack" }
+    },
+    {
+      "src": "/humble-asm-js-bundle/",
+      "status": 301,
+      "headers": { "Location": "/humble-asm" }
     }
   ]
 }

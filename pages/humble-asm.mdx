@@ -1,0 +1,14 @@
+# [blog.vararu.org](/)
+
+## Humble asm.js Bundle
+
+<time dateTime="2014-10-14">14 October 2014</time>
+
+Mozilla sponsored this week's [Humble Bundle](https://www.humblebundle.com). The games are all desktop games that have been ported to the browser with `asm.js`. I had to switch over to Firefox to try out Faster Than Light, but surely enough it booted up and was playable in a flash. Amazing.
+
+I've [fooled around](https://github.com/tvararu/asm-benchie) with `asm.js` a bit before just as a proof of concept to see how hard it is to port an arbitrary C script I wrote to the browser. Quite easy, and the performance speaks for itself:
+
+- Vanilla JavaScript: **619ms**
+- C script compiled to JavaScript: **167ms**
+
+For reference, the compiled C Script runs in **87ms**.
