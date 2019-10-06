@@ -18,7 +18,8 @@ Producing the video turned out to be tricker than I initially thought. I first s
 I wrote a quick `ffmpeg` invocation to slice it:
 
 ```bash
-ffmpeg -i ghost-full.mp4 -ss "00:33:04" -to "00:33:53" -c copy ghost-1.mp4
+ffmpeg -i ghost-full.mp4 -ss "00:33:04" -to "00:33:53" \\
+  -c copy ghost-1.mp4
 ```
 
 But the resulting video didn't work correctly. It had a few seconds of no output in the beginning. I found out that this was because of a concept called "index keyframes", or `i-frames`, which for this task were the only frames that I could crop from without re-encoding and without exporting gaps. Re-encoding has the potential to introduce a loss of quality which is something I wanted to avoid.
@@ -26,9 +27,9 @@ But the resulting video didn't work correctly. It had a few seconds of no output
 Finding the `i-frames` can be done with a tool that is part of the `ffmpeg` `brew` distribution, `ffprobe`:
 
 ```bash
-ffprobe -select_streams v -show_frames \
--show_entries frame=pict_type \
--of csv ghost-full.mp4 > ghost-frames.csv
+ffprobe -select_streams v -show_frames \\
+  -show_entries frame=pict_type \\
+  -of csv ghost-full.mp4 > ghost-frames.csv
 ```
 
 This will output the full list of frames to a `ghost-frames.csv` file. To get the `i-frames`:
@@ -48,8 +49,8 @@ The timestamp in seconds is:
 To get the frame, you multiply by the framerate. To get the framerate:
 
 ```bash
-ffprobe -v 0 -of compact=p=0 -select_streams 0 \
--show_entries stream=r_frame_rate ghost-full.mp4
+ffprobe -v 0 -of compact=p=0 -select_streams 0 \\
+  -show_entries stream=r_frame_rate ghost-full.mp4
 ```
 
 Which returns `24000/1001`, which is `23.976023976`. The former is better for arithmetic, so:
