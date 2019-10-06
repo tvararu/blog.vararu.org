@@ -1,0 +1,32 @@
+# [blog.vararu.org](/)
+
+## Accessibility testing tools are lying to you
+
+<time dateTime="2017-06-08">08 June 2017</time>
+
+There are widely available tools, like [Google Lighthouse](https://developers.google.com/web/tools/lighthouse/), which provide audits for web content accessibility.
+
+None of the tools I am aware of today provide results that are meaningful. They are quite easily gamed into perfect 100/100 scores, which instils a false sense of confidence that your website is accessible when it is not.
+
+These tools work by piping your HTML through a [WCAG 2.0](https://www.w3.org/TR/WCAG/)-based checklist. Claiming that a website is accessible because it passes WCAG 2.0 is about as relevant as saying a site works for all users and their browsers because it passes an HTML5 validator. It's a good prerequisite, but far detached from the full story.
+
+Accessibility testing, being a branch of usability testing, is not easily automated. Here's one way to do it:
+
+1. Do user research with users with access needs;
+2. Fix the issues found;
+3. Do user research again to confirm the fixes work;
+4. Write automated tests to prevent regressions from occurring.
+
+Writing automated tests, as opposed to running accessibility audit tools, focuses on the barriers specific to your product.
+
+A tool to write automated tests that detects accessibility features in the way they impact users **does not exist today**.
+
+Similar to end to end testing which instruments real browsers, there is no way to verify if intricately interconnected incantations of HTML, CSS, and JavaScript will produce the right triggers and behaviours in the browsers and [assistive technologies that are widely used](https://accessibility.blog.gov.uk/2016/11/01/results-of-the-2016-gov-uk-assistive-technology-survey/).
+
+In more concrete technical examples, there is no automated way to check what is pronounced (if anything) as a result of your `aria-live` region update on IE11 and JAWS14.
+
+There is no automated way to check if your `onclick` handler which triggers when tapping on iOS Safari will still work when VoiceOver is on.
+
+There is no automated way to check if it is possible to click on your dynamically inserted button by telling Dragon NaturallySpeaking to "click button."
+
+And until these things are possible, accessibility testing tools are lying to you.

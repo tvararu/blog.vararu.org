@@ -59,9 +59,9 @@
       "headers": { "Location": "/yak-shaving-ghost" }
     },
     {
-      "src": "/whats-webvr-good-for-even/",
+      "src": "/accessibility-testing-tools-are-lying-to-you/",
       "status": 301,
-      "headers": { "Location": "/why-webvr" }
+      "headers": { "Location": "/lying-a11y-tools" }
     }
   ]
 }
