@@ -52,6 +52,11 @@
       "src": "/computer/",
       "status": 301,
       "headers": { "Location": "/computer" }
+    },
+    {
+      "src": "/yak-shaving-ghost/",
+      "status": 301,
+      "headers": { "Location": "/yak-shaving-ghost" }
     }
   ]
 }

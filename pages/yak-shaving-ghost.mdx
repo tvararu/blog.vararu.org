@@ -1,0 +1,36 @@
+# [blog.vararu.org](/)
+
+## A yak shaver's guide to upgrading Ghost from 0.5.9 to 0.11.3
+
+<time dateTime="2016-11-05">05 November 2016</time>
+
+This isn't so much a technical guide as it is me venting about my latest yak shave.
+
+[Ghost](https://ghost.org) kept badgering me to update so I decided, what the hell, I'm bored, let's go.
+
+- Current version is 0.5.9, latest is 0.11.3, you need to do an intermediary update to 0.7.x.
+- `wget` 0.7.1, install it by manually copying and `chown`ing files. Ponder why the maintainers don't have a script for this.
+- Run it, seems to work fine. On to the `latest` release I guess?
+- `wget` latest, do the copying dance again.
+- `npm install` fails because my node version is too old for Ghost. My blog server is running node v0.10. So yes, it is ancient.
+- `apt-cache show nodejs` has v0.6 as the latest available thing so that's a no-go.
+- Attempt to install node v7, get an error when [piping curl to sudo bash](https://nodejs.org/en/download/package-manager/) (!) that my Ubuntu is too old.
+- Turns out I'm running 12.04. So yes, it is ancient.
+- Learn how to do a LTS upgrade on Ubuntu and succeed after 3 badgering `curses` prompts asking for explicit user confirmation about changing `grub` and various other arcane config files and a reboot.
+- Run `apt-cache show nodejs` for giggles, now the latest one is v0.10.
+- Install node v7 successfully using their `curl | sudo bash` command. Eat your hearts out, security pundits.
+- `npm install` fails because my node version is too old. What?
+- `node -v` is still v0.10, node v7 was linked as `nodejs`.
+- I'm losing my patience.
+- `sudo mv /usr/bin/node /usr/bin/oldnode`
+- `sudo ln -s /usr/bin/nodejs /usr/bin/node`
+- `npm install` fails because my node version is too new. Ghost decided to only support LTS versions, and hard fails when you use a newer one.
+- Very long and drawn out sigh.
+- Add `GHOST_NODE_VERSION_CHECK=false` to my shell in the hope that Ghost will pick it up when running scripts. Nope.
+- Uninstall node v7.
+- Install node v6.9.
+- `npm install` fails because `ENOMEM`. My VPS is running 512MB RAM and doesn't have any swap.
+- Learn how to add and use a swapfile on Ubuntu.
+- `npm install` finally works and I'm running my blog again.
+
+On the bright side, I learned two more things I'll probably never need again about Ubuntu.
