@@ -17,6 +17,11 @@
       "src": "/humble-asm-js-bundle/",
       "status": 301,
       "headers": { "Location": "/humble-asm" }
+    },
+    {
+      "src": "/webgl-cloth-implemented-in-famo-us/",
+      "status": 301,
+      "headers": { "Location": "/famous-cloth" }
     }
   ]
 }
