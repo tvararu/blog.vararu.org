@@ -1,0 +1,51 @@
+# [blog.vararu.org](/)
+
+## When to rewrite code from scratch
+
+<time dateTime="2016-10-16">16 October 2016</time>
+
+**Edit 27/10/2016:** The c2 wiki is back online, and you can [find the original article here](http://wiki.c2.com/?RewriteCodeFromScratch).
+
+The c2 wiki has been closed for "remodeling." It has a very good article about [good and bad reasons to rewrite code from scratch](http://c2.com/wiki/closed.html?RewriteCodeFromScratch). I hope the irony of this is not lost on the reader.
+
+Until the page comes back up, here is the abridged version I saved to a text file a while ago:
+
+### Good Reasons to Rewrite Code from Scratch
+
+- Required changes cannot be made using the existing code base.
+- We can't get the existing code to compile, or we can't even find the existing code.
+- Nobody can figure out how it works.
+- The architecture or underlying infrastructure is changing dramatically.
+- It is so bug-ridden or ill-suited to the requirements that it is completely useless as-is.
+- We are just doing it for fun or to exercise our development skills.
+- IntellectualProperty or licensing issues make it desirable to stop using someone else's code.
+- When the problem becomes too complex for the original language. For example, if I have a sed script whose complexity is getting out of hand, best rewrite it in some other language. Remember, not every program is "big".
+- We are going to be held responsible for it over a long term, and are uncomfortable with accepting responsibility for the existing code base.
+
+### Good Reasons to Avoid Rewriting Code from Scratch
+
+- Nobody knows what all the features are of the LegacyCode, or what requirements it is supposed to fulfil.
+- No tests are available to verify that new code is functionally equivalent to LegacyCode.
+- There are more-important things we can do with our time than re-writing code that already works. We don't need to be ReinventingTheWheel.
+- If the re-write takes longer than expected (and re-writes often do), then customers may move to other products/vendors.
+- We can re-write it a bit at a time rather than throwing it all away.
+- We have no reason to believe that a new team will do a better job than the original team did.
+
+### Bad Reasons to Rewrite Code from Scratch
+
+- It's really ugly.
+- We don't like the coding style.
+- We don't want to read it to figure out how it works.
+- It's not done the way we would have done it.
+- We don't like the people who wrote it. All their stuff sucks.
+- It was NotInventedHere (unless you're doing so as a loophole regarding IntellectualProperty issues)
+- It's too slow in some unspecific way. Better solution: find the hotspots (ProfileBeforeOptimizing) and optimize those. Only after quantifying the performance problems can it be determined that a total re-write is needed.
+
+### Bad Reasons to Avoid Rewriting Code from Scratch
+
+- We don't trust the developers to do it right. (This reason is even worse if it's valid.)
+- My grand-daddy always told me "IfItAintBrokeDontFixIt."
+
+Notes:
+
+- The CapitalisedCamelCased words are links to other c2 articles.
