@@ -1,0 +1,88 @@
+## Building my new blog
+
+<time dateTime="2019-10-06">10 October 2019</time>
+
+I started this blog in 2014 using a [Ghost](https://ghost.org) instance hosted
+on [DigitalOcean](https://www.digitalocean.com).
+
+While Ghost has served me well, [it’s been a bit annoying to maintain](/yak-shaving-ghost).
+Also, paying 5 dollars per month for something that could be accomplished using
+static pages is wasteful. Because I know how to write code, I don’t need a fancy
+admin interface to write posts either.
+
+After about 3 years of procrastination, today I finally got around to rewriting
+my blog.
+
+### Investigating options
+
+I looked at [gatsby.js](https://www.gatsbyjs.org) initially. I didn’t like the
+reliance on the `gatsby` CLI tool, the complicated set of dependencies it brings
+in (`graphql`? What?), or the weird defaults like coming with a `.prettierrc`
+out of the box. I abandoned it pretty quickly.
+
+I then went to my usual framework of choice, [next.js](http://nextjs.org), and
+I looked at their [blog-starter example](https://github.com/zeit/next.js/tree/master/examples/blog-starter).
+It too seemed quite complicated compared to my needs: `babel-plugin-*`s that I
+don’t recognise or know the purpose of, and lots of choices that I would have
+to unpick one by one, such as the nesting of posts under the `/posts/` route.
+
+However, I didn’t abandon `next.js`, because I knew it had good features like
+[automatic static page export](https://nextjs.org/blog/next-9#automatic-static-optimization),
+while also allowing me to sprinkle in React where necessary. As I knew I wanted
+markdown support, I started from the [with-mdx](https://github.com/zeit/next.js/tree/master/examples/with-mdx)
+example.
+
+### Building it
+
+After initialising the project, adding a `.gitignore` and running `git init`,
+there were a few other things I wanted to cram into the [`Initial commit`](https://github.com/tvararu/blog.vararu.org/commit/fcd1f4097ad5d98293d5934aa0b19b3d4bf194c9):
+
+- a Cypress end to end testing setup, with some very simple but crucial
+  assertions
+- a `.circleci/config.yml` to run the tests in CI
+- a `now.json` to deploy the resulting static pages to [now](https://zeit.co/now),
+  and allow me to define `301` redirects for legacy pages, or create serverless
+  endpoints for server-side logic.
+
+After this, I immediately started importing my old posts, one by one. I decided
+not to try to automate this, so that I can review each post one by one and see
+if the setup is working.
+
+I added in favicons (from my [main site’s repo](https://github.com/tvararu/vararu.org)),
+refactored some parts of the layout, changed the `<title>`, and added an
+additional test.
+
+Ah, and [I completely disabled the single-page app aspect of `next.js`](https://github.com/tvararu/blog.vararu.org/commit/9f1169d8674f2b35fbb89540f93f481286ca09f4).
+I did this by overwriting the `<Head>` element to not include any prefetching
+logic, and by removing the `<NextScript />` declaration at the end of the
+`_document` component.
+
+This removes the React and client-side bundle that Next.js sends down the wire
+by default. The only downside to this is that it removes the hot code reloading
+in development. It’s not that important to me in this project.
+
+The last thing to do was styling, which [I did in a pretty minimal way](https://github.com/tvararu/blog.vararu.org/commit/fd0911858ef16e66f7da5725cdf7726920c29c28).
+I added in only the declarations that I felt I absolutely needed, and the
+resulting stylesheet is less than 1 screenful.
+
+### Shipping it
+
+I ran a Lighthouse audit. The site scored 100/100 for Performance,
+Accessibility, Best Practice, and SEO, all on the first try. Much better than
+my old blog. This isn’t surprising given that every page is under `3KB` (total
+size) and I’ve taken care to use good contrasting colours and not mess about
+with styling.
+
+To replace my old blog, I had only to remove the existing DNS entry, as I
+already had a fallback `*` record pointing to `alias.zeit.co` which is where I
+had been deploying the site while testing it. Couple of minutes, and it went
+live.
+
+There’s a few things I still need to do:
+
+- add an RSS feed
+- add meta description headers per page
+- change the title per page
+
+These can be done manually, but I’m just lazy. I’ll probably procrastinate
+another 3 years or so and then get around to them.
