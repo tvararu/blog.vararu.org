@@ -1,0 +1,271 @@
+# blog.vararu.org
+
+## Adding HTML5 pushstate support to mean-seo
+
+<time dateTime="2014-08-02">02 August 2014</time>
+
+So you're building a single page application and you want to make it crawler-friendly. You've heard some things about PhantomJS, about prerendering pages, maybe you've even found a tutorial but it's telling you to [throw a giant piece of untested JavaScript](http://backbonetutorials.com/seo-for-single-page-apps/) into your Express file. You want something simpler, since you're thinking about building a lot of SPAs, and you don't want to lug around that much boilerplate between them.
+
+Turns out there are already some people that have gone ahead and [made an Express middleware package](http://blog.meanjs.org/post/78474995741/mean-seo) that you can just call as a one-liner. And that should be the end of the discussion, but the thing only works for old `#!` style URLs and not newer HTML5 pushstate ones.
+
+It's not that hard to fix, though.
+
+**TL;DR**: [skip to the end](#tldr) if you're just interested in using my own forked build instead, and not what I actually changed to it.
+
+### My first experience with `mean-seo`
+
+This was just what I was looking for: one-liner Express middleware to add PhantomJS-enabled prerendering for single page applications. So I tried it out.
+
+Here's my very lean Express file that's basically just a glorified `python -m SimpleHTTPServer`:
+
+```javascript
+var express = require("express");
+var compression = require("compression");
+
+var app = express();
+
+// Enable gzip compression.
+app.use(compression());
+
+app.use("/", express.static(__dirname + "/dist"));
+app.listen(process.env.PORT);
+```
+
+Following the [aforementioned blogpost](http://blog.meanjs.org/post/78474995741/mean-seo), I installed `mean-seo` through npm and added the `app.use(seo());` call. All done!
+
+Or so I thought. I decided to give it a whirl and see if it's actually doing something. At this point in time, I was so busy fiddling with my build workflow that I didn't have much of an application to test, so I decided to add a simple call to turn my bare `index.html` into an extremely complex dynamic application:
+
+```javascript
+document.title = "Yay dynamic web!";
+```
+
+As such, if you run `curl` against the website then you'll just get the initial response, which reads something like this (minified HTML, `\n`s added for emphasis):
+
+```bash
+$ curl localhost:3000
+<!DOCTYPE html><html lang=en manifest=app.manifest><head><meta charset=utf-8><meta name=fragment content=!><meta name=viewport content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+<title>Hello, world!</title>
+
+</head><body><p>Hello, world!</p><script src=js/main.js></script></body></html>
+```
+
+However, if you open the website in your browser, while the initial response is the same, the title will be instantaneously changed by JavaScript to read `<title>Yay dynamic web!</title>`.
+
+In a more complex single page application, you use JavaScript to mutate the initial HTML response to a state that is virtually unrecognizable from the initial one. The initial response is almost irrelevant to the actual content that you want to present, and it's definitely not what you want search engines to bother indexing.
+
+When our app gets pinged in a specific way, we want our Express server to spawn a PhantomJS headless browser, read and evaluate our page just as a real browser would, and return a different response to the browser, which is a pre-chewed application view. That's the job of `mean-seo`, so let's try to manually test it.
+
+Reading through the [AJAX app guidelines from Google](https://developers.google.com/webmasters/ajax-crawling/docs/specification), they specify two different methods of indicating that your app is dynamic, depending on which kind of urls you're using:
+
+- old-style, "#" URLs, i.e. `example.com/#/home`;
+- new-style, HTML5 pushstate URLs, i.e. `example.com/home`.
+
+To tell search engines to interpret your pages as shiny new-fangled HTML5 pushstate pages, the first thing you have to do is include a meta tag:
+
+```html
+<meta name="fragment" content="!" />
+```
+
+When a crawler encounters this tag, it will stop and immediately redial the same link. This time however, it will suffix the link with an additional get parameter, namely `_escaped_fragment_`. So taking our earlier example, it will just call `http://example.com/home?_escaped_fragment_=`.
+
+So coming back to triggering `mean-seo` to work, all we have to do is just add that get parameter to our request. Here's what happens, however:
+
+```bash
+$ curl localhost:3000?_escaped_fragment_=
+<!DOCTYPE html><html lang=en manifest=app.manifest><head><meta charset=utf-8><meta name=fragment content=!><meta name=viewport content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+<title>Hello, world!</title>
+
+</head><body><p>Hello, world!</p><script src=js/main.js></script></body></html>
+```
+
+Well, this looks dissapointingly familiar; it's the exact same response as earlier. At this point in time I decided to test my assumptions and whether I was actually asking for the correct URL by pinging other single page apps on the web, but I wasn't doing anything wrong in this respect.
+
+So after inefficiently throwing out random curl calls to both other apps and my own, I decided to go source-diving into `mean-seo` to see what exactly is going on.
+
+### Diving in
+
+Finding the source of the problem wasn't particularly difficult, once I figured out it must be something in `mean-seo`'s innards. Right in `lib/mean-seo.js`, we have the culprit (code slightly redacted for brevity):
+
+```javascript
+return function SEO(req, res, next) {
+  var escapedFragment = req.query._escaped_fragment_;
+
+  //If the request came from a crawler
+  if (escapedFragment) {
+    /* do SEO stuff */
+  } else {
+    next();
+  }
+};
+```
+
+Can you see the problem? The `if` block will only execute if the conditional is truthy. But for `localhost:3000?_escaped_fragment_=`, the value of `_escaped_fragment_` is empty string, which is falsey. Argh!
+
+So at this point I figured this must be a bug in `mean-seo`, so I decided to [file it](https://github.com/meanjs/mean-seo/issues/6). Only after taking a closer look into why it happens and/or fixing it did I figure out the root cause.
+
+You see, the code actually works fine with old-style `#` URLs. Because for those, the spec says that `_escape_fragment_` will get a value of a so-called "hashfragment". As such, `example.com/#/home` turns into `example.com/#!/home?_escape_fragment_=home`, or something along those lines. The point being, for **old style "#" URLs, `_escape_fragment_` is never just an empty string**.
+
+So, how do we fix it? Turns out it's not that hard. `mean-seo` uses the value of `_escaped_fragment_` to figure out if we need to serve the prerendered page, and then also uses the value as the key to cache the pages. Fixing the `if` clause is just a matter of checking if `escapedFragment !== undefined`, while finding a different key to store pages against isn't that hard either:
+
+```javascript
+return function SEO(req, res, next) {
+  var escapedFragment = req.query._escaped_fragment_;
+
+  //If the request came from a crawler
+  if (escapedFragment !== undefined) {
+    var url = req.protocol + "://" + req.get("host") + req.originalUrl;
+    // Stop Phantom from going into an infinite loop.
+    url = url.replace("_escaped_fragment_", "fragment_data");
+
+    /* send code over to PhantomJS, store it, etc */
+  } else {
+    next();
+  }
+};
+```
+
+You'll notice that I also did a simple string replace for the old name of the `GET` parameter. What that prevents is the situation in which the URL gets sent to PhantomJS later on, which will ping our server, which will reach this code again since the `GET` parameter is the exact same, which will spawn a new PhantomJS instance, which will ping the server, which... you get the idea.
+
+Time to test it:
+
+```bash
+$ curl localhost:3000?_escaped_fragment_=
+<!DOCTYPE html><html lang=en manifest=app.manifest><head><meta charset=utf-8><meta name=fragment content=!><meta name=viewport content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+<title>Yay dinamic web!</title>
+
+</head><body><p>Hello, world!</p><script src=js/main.js></script></body></html>
+```
+
+The response took a few millis to come back, but it looks great!
+
+Subsequent requests are instantaneous however because `mean-seo` already does caching for us, in this case via writing files to disk. Which brings me to my next hack.
+
+### Bonus: using Heroku-based `rediscloud`
+
+`mean-seo` states that it supports two different ways of caching your prerendered pages: `disk` and `redis`. Opting in for one or the other is pretty simple, as per the documentation:
+
+```javascript
+app.use(
+  seo({
+    cacheClient: "redis" // or 'disk', which is the default
+  })
+);
+```
+
+The first thing that I had to ask myself is how this works on Heroku, which is where I'm hosting my application frontend since it provides a really lean, maintainable and easily extensible way to get a basic Express server going.
+
+Heroku hosts your app on `dynos`, which use an ephemereal filesystem. What this means is that only the files that are written to version control are actually guaranteed to persist between requests, since when you're using multiple `dynos` you're not actually sure which one of them you're pinging with requests because Heroku does the multi-server routing for you. So, `disk` based caching for `mean-seo` sounds like a waste of time; not to mention, Heroku will also flush everything that isn't in version control between application restarts.
+
+It's a good thing then that `mean-seo` allows for `redis` as the key-value store. But how does it actually go about doing that? `lib/cache-clients/redis.js` is surprisingly concise:
+
+```javascript
+"use strict";
+
+exports = module.exports = require("redis").createClient();
+```
+
+That's really simple. But even though I haven't actually tried it, I'm pretty sure it doesn't work on Heroku.
+
+Since Heroku does multiple dyno routing for you, Heroku also does not allow you to use storage methods that potentially only work on one dyno, such as SQLite or spawning your own PostgreSQL instance by hand on the same machine as your application server. It's a pretty good guess that they don't allow using `redis` in this way either.
+
+Heroku forces you to decouple the database servers from your application servers from the very beginning, which seems like a good decision to make regardless.
+
+That being said, Heroku provides a number of different addons for all different kinds of databases and stores, one of them being [rediscloud](https://addons.heroku.com/rediscloud). Using the addon will simply expose a `REDISCLOUD_URL` environment variable that you can use in your code to opt for their service.
+
+Adding support for this is pretty straightforward; with a bit of help from [@dapetcu21](https://github.com/dapetcu21), the `redis` client now supports an additional option, called `redisURL`:
+
+```javascript
+"use strict";
+
+var redis = require("redis");
+var url = require("url");
+
+exports = module.exports = function(opts) {
+  if (opts.redisURL) {
+    var redisURL = url.parse(opts.redisURL);
+    var client = redis.createClient(redisURL.port, redisURL.hostname, {
+      no_ready_check: true
+    });
+    client.auth(redisURL.auth.split(":")[1]); //does not support db indexes
+    return client;
+  } else {
+    return redis.createClient();
+  }
+};
+```
+
+Going back to my Express config, here's what it now looks like:
+
+```javascript
+var express = require("express");
+var compression = require("compression");
+var seo = require("mean-seo");
+
+var app = express();
+
+// Enable gzip compression.
+app.use(compression());
+
+// Enable PhantomJS SEO.
+if (process.env.REDISCLOUD_URL) {
+  // If we've got Redis available, use that.
+  app.use(
+    seo({
+      cacheClient: "redis",
+      redisURL: process.env.REDISCLOUD_URL
+    })
+  );
+} else {
+  // Otherwise, use regular disk-based cache.
+  app.use(seo());
+}
+
+app.use("/", express.static(__dirname + "/dist"));
+app.listen(process.env.PORT);
+```
+
+That's it! Now I've got PhantomJS prerendering for search engines, with Heroku-friendly `redis` based caching.
+
+### <a name="tldr"></a>The TL;DR version
+
+If you just want to use my version of the `mean-seo` package, which adds `rediscloud` and HTML5 pushstate support, then you'll have to add this to your `dependencies` in `package.json`:
+
+```javascript
+"mean-seo": "git://github.com/tvararu/mean-seo.git#f641eee"
+```
+
+Run `npm install`, and then use it just like they specify:
+
+```javascript
+var express = require("express");
+var seo = require("mean-seo");
+
+var app = express();
+
+// Enable PhantomJS SEO.
+app.use(seo());
+```
+
+Or, with `redis`:
+
+```javascript
+app.use(
+  seo({
+    cacheClient: "redis"
+  })
+);
+```
+
+Or, with `rediscloud` (don't forget about the environment variable):
+
+```javascript
+app.use(seo({
+  cacheClient: 'redis'
+  redisURL: process.env.REDISCLOUD_URL
+}));
+```
+
+That's about it. Happy caching!

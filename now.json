@@ -1,5 +1,12 @@
 {
   "version": 2,
   "name": "blog-v2",
-  "alias": "blog-v2.vararu.org"
+  "alias": "blog-v2.vararu.org",
+  "routes": [
+    {
+      "src": "/adding-pushstate-support-mean-seo/",
+      "status": 301,
+      "headers": { "Location": "/mean-seo" }
+    }
+  ]
 }
