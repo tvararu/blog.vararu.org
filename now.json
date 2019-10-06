@@ -32,6 +32,11 @@
       "src": "/deploying-an-app-with-facebook-login-in-5-minutes/",
       "status": 301,
       "headers": { "Location": "/meteor-sso" }
+    },
+    {
+      "src": "/let-javascript-haskell/",
+      "status": 301,
+      "headers": { "Location": "/let-javascript-haskell" }
     }
   ]
 }

@@ -1,0 +1,74 @@
+# [blog.vararu.org](/)
+
+## let javascript = haskell?
+
+<time dateTime="2015-02-16">16 February 2015</time>
+
+Today I found myself reading some JavaScript code and thinking, have I not seen this before?
+
+```javascript
+let square = x => x * x;
+```
+
+I reinstalled `ghc` and threw it in `ghci` for giggles:
+
+```haskell
+➜  ~  ghci
+GHCi, version 7.8.4: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+Prelude> let square = x => x * x;
+
+<interactive>:2:16: parse error on input ‘=>’
+Prelude>
+```
+
+That's no fun. What _was_ the correct syntax, though? [Oh, right](https://wiki.haskell.org/Function):
+
+```haskell
+Prelude> let square x = x * x
+Prelude> square(2)
+4
+```
+
+Let's just view those side by side, harmless whitespace added for emphasis:
+
+```haskell
+let square = x => x * x;
+let square   x =  x * x
+```
+
+So, if you remove "optional" (\*cough\* arguably not optional) lexical tokens such as the semicolon and the fat arrow parantheses, you'll find that **ES6 can be within a [Levenshtein distance](http://en.wikipedia.org/wiki/Levenshtein_distance) of 2 characters from Glorious Glasgow Haskell**.
+
+Come to think of it, it could also be distance 0. Praise `let`!
+
+```javascript
+let number = 42;
+```
+
+Here's another similarity:
+
+```bash
+➜  ~  node
+> 0.1 + 0.2
+0.30000000000000004
+
+➜  ~  ghci
+Prelude> 0.1 + 0.2
+0.30000000000000004
+```
+
+Can we keep going?
+
+```bash
+➜  ~  node
+> ["10", "10", "10"].map(parseInt)
+[ 10, NaN, 2 ]
+
+➜  ~  ghci
+Prelude> map (read :: String -> Int) ["10", "10", "10"]
+[10,10,10]
+```
+
+Eh, I'm confident Haskell will eventually catch up.
