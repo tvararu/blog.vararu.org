@@ -42,6 +42,12 @@ export default class MyApp extends App {
             margin: 0 -1rem;
           }
 
+          pre,
+          code {
+            font-family: Menlo, Monaco, Consolas, "Liberation Mono",
+              "Courier New", monospace;
+          }
+
           blockquote {
             margin-left: 0;
             padding: 1px 0rem 0.1rem 1rem;
