@@ -67,6 +67,11 @@
       "src": "/ghost-in-the-screensaver/",
       "status": 301,
       "headers": { "Location": "/ghost-in-the-screensaver" }
+    },
+    {
+      "src": "/what-to-do-with-software-development-downtime/",
+      "status": 301,
+      "headers": { "Location": "/downtime" }
     }
   ]
 }
