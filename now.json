@@ -47,6 +47,11 @@
       "src": "/when-to-rewrite-code-from-scratch/",
       "status": 301,
       "headers": { "Location": "/rewrite-from-scratch" }
+    },
+    {
+      "src": "/computer/",
+      "status": 301,
+      "headers": { "Location": "/computer" }
     }
   ]
 }
