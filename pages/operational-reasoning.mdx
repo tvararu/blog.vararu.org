@@ -1,0 +1,37 @@
+# [blog.vararu.org](/)
+
+## Operational reasoning considered harmful
+
+<time dateTime="2015-12-20">20 December 2015</time>
+
+[c2.com](http://c2.com/cgi/wiki?OperationalReasoning):
+
+> Operational reasoning means reasoning about the program by thinking how a machine executing the program will run: what effect on the state of the machine will each instruction have, what will [the] program do next, etc. Simulating the processor (or an abstract interpreter) in your head.
+
+Before I even had a career, I went to computer algorithm competitions, writing solutions in C/C++. The problems were in a similar vein to the ones on [TopCoder](https://www.topcoder.com/) or the [ACM-ICPC](https://icpc.baylor.edu/); it was common practice to train for the olympiads by solving problems from TC/ACM.
+
+The problems were tough. What made them tough were the large/complex inputs, the limited wall time and memory restrictions, as well as the large repertoire of classic computing algorithms you had to know by heart.
+
+You could learn a lot about the category of solution required just from reading the limits. A `65535 kbytes` memory limit was often a sign of a problem that wasn't particularly finnicky about its memory allocation, so you could respond by using an algorithm with a high space complexity to fit the wall time limit of `0.1s`. But it was far more common to get a `640 kbytes` memory limit in `0.05s` time. Seeing these figures after reading a problem description would disqualify some algorithms outright, in spite of their elegance. Glob help you if you forgot to use `short` instead of `int` where applicable.
+
+Operational reasoning was an essential skill in this environment. One of the first tricks my teacher taught me was just how slow `endl` was compared to `'\n'` on the version of the `gcc` compiler that was used by the committee. I thought him to be mad, but I checked myself: for a category of problems that require significant output, a solution could fail to attain the maximum amount of points, simply for using `endl`.
+
+And that was low hanging fruit, same as using `--i` in a for loop or hand-rolling your own red-black tree instead of relying on `<set.h>`. Some students would forfeit `iostream` and read files using `open` and `read`, parsing the input manually. Turns out that if you know before-hand the exact structure of your input, and don't have to account for multiple types, you can write 30ish SLOC of rehearsed boilerplate to reimplement number-only `fscanf` that will be faster on really large inputs.
+
+These anecdotes are of course nothing compared to the bleeding edge optimisations a C hacker will have seen throughout her career.
+
+I never completely subscribed to this ideology. I never learned the hard way of reading a file, and in every case where I needed a sorted array of unique elements I chucked a `Set<>`, wrote a basic solution, and went on to the other problems. I would return and write the faster optimised version only after securing a basic working solution for the other problems, which often meant never. I used `'\n'` instead of `endl` because it was simple, but felt dirty doing so. I didn't rehearse the flags for `open` because I was busy grokking Floyd–Warshall or Knuth–Morris–Pratt.
+
+But I'm not writing highly optimised C today. I'm writing JavaScript, mostly in the context of building user interfaces using heavy frameworks. The problems I face are unrelated to the execution time of my program, as is evident from my choice of stack. Insufficiently documented, tested, hard to understand programs are probably my biggest time sink.
+
+It's widely recognised that programmers are not adept at estimating the duration of programming tasks. We're marginally better at estimating which parts of our codebase are likely to be slow, but not significantly so.
+
+Next time you think about using `continue` or `break`, ask yourself if there is a cleaner way.
+
+Use `map`, `filter`, and `reduce`. If you think you know better than the interpreter, [you probably don't](https://www.youtube.com/watch?v=65-RbBwZQdU). Should you need to optimise your code, pure functions parallelise and memoise beautifully.
+
+Write code that humans can read, code that doesn't surprise. And if you can:
+
+> Avoid operational reasoning like the plague.
+>
+> — Edsger W. Dijkstra
