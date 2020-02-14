@@ -7,13 +7,14 @@ const formatDate = iso =>
     year: "numeric"
   });
 
-const Meta = ({ title, date }) => (
+const Meta = ({ title, date, description }) => (
   <>
     <Head>
-      <title>{title} | blog.vararu.org</title>
+      {title && <title>{title} | blog.vararu.org</title>}
+      {description && <meta name="description" content={description} />}
     </Head>
-    <h2>{title}</h2>
-    <time dateTime={date}>{formatDate(date)}</time>
+    {title && <h2>{title}</h2>}
+    {date && <time dateTime={date}>{formatDate(date)}</time>}
   </>
 );
 

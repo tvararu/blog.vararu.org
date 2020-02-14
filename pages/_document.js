@@ -112,14 +112,16 @@ const Favicons = () => (
 
 const CustomHead = () => (
   <NonSpaHead>
-    <meta name="description" content="Theodor Vararu's blog." />
-
     <link rel="canonical" href="https://blog.vararu.org/" />
 
     <meta property="og:site_name" content="blog.vararu.org" />
     <meta property="og:title" content="blog.vararu.org" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://blog.vararu.org" />
+    <meta
+      property="og:image"
+      content="https://blog.vararu.org/favicon/apple-touch-icon-152x152.png"
+    />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="blog.vararu.org" />
