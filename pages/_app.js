@@ -57,6 +57,25 @@ export default class MyApp extends App {
           footer {
             margin: 2rem 0;
           }
+
+          @media (prefers-color-scheme: dark) {
+            body {
+              background-color: #0b0c0c;
+              color: #f3f2f1;
+            }
+
+            a {
+              color: #5694ca;
+            }
+
+            a:visited {
+              color: #1d70b8;
+            }
+
+            blockquote {
+              border-color: #f3f2f1;
+            }
+          }
         `}</style>
         <main>
           <h1>
