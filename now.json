@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "alias": "blog.vararu.org",
   "routes": [
     {
       "src": "/adding-pushstate-support-mean-seo/",
