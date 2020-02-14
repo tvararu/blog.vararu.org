@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "blog",
   "alias": "blog.vararu.org",
   "routes": [
     {
