@@ -11,6 +11,7 @@ export default class MyApp extends App {
         </Head>
         <style global jsx>{`
           body {
+            color: #0b0c0c;
             font-family: Charter, Iowan, Palatino, "Times New Roman", Times,
               serif;
             margin: 1rem;
