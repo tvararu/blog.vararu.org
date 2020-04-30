@@ -8,7 +8,7 @@ import Meta from "../components/Meta";
 
 These are my notes and a high-level guide for how I run Windows and macOS VMs in Proxmox.
 
-## What is this and why even bother?
+### What is this and why even bother?
 
 Proxmox VE is a headless Ubuntu-based distro. It comes with QEMU preinstalled, which allows you to run Kernel-based Virtual Machines, or KVMs. KVMs run on a type-1 hypervisor, also known as a native or bare-metal hypervisor. Proxmox also comes with a web interface to configuring and managing your virtual machines.
 
@@ -18,13 +18,13 @@ QEMU also allows PCI passthrough of native hardware to a VM, such as graphics ca
 
 My use-case is using macOS for productivity, while running Windows at the same time for gaming. This isn’t possible on my current setup, as I still need an extra graphics card, but I am evaluating this setup for a while longer before I commit to buying more hardware.
 
-## Preparation
+### Preparation
 
 - Make sure VT-x and VT-d are enabled in your BIOS
 - Ensure you have a minimum of 2 drives; one for Proxmox, one for VMs
 - Ensure you have a working computer to connect to the Proxmox web interface, or via SSH, or to generally do work on while you spend the next days/weeks fiddling with your new VM obsession
 
-## Installing Proxmox
+### Installing Proxmox
 
 Download a copy of ProxmoxVE from https://www.proxmox.com/en/downloads.
 
@@ -123,7 +123,7 @@ Reboot the machine to enable IOMMUs and unload your graphics card(s) from Proxmo
 
 Through the web interface, go to Datacenter > proxmox > Disks > ZFS. Create a new ZFS, I named mine `sandisk` using `/dev/sda`. Note that the drive needs to be completely clean, which can be accomplished via SSH using `fdisk /dev/sda`.
 
-## Creating the Windows VM
+### Creating the Windows VM
 
 Windows is a lot easier to get up and running than macOS, so it's a better starting point to learn the basics.
 
@@ -179,7 +179,7 @@ VM 100 qmp command 'savevm-end' failed - VM snapshot not started
 TASK ERROR: VM 100 qmp command 'savevm-start' failed - State blocked by non-migratable device '0000:00:1c.0:00.0/vfio-pci'
 ```
 
-## Creating the macOS VM
+### Creating the macOS VM
 
 macOS is more challenging than Windows.
 
@@ -263,7 +263,7 @@ $ vim /Volumes/EFI/OC/config.plist
 
 Check out the Dortania OpenCore Desktop Guide for more tips and tricks: https://dortania.github.io/OpenCore-Desktop-Guide/
 
-## My hardware
+### My hardware
 
 - MOTHERBOARD: Asus Z170-A
 - CPU: Intel i7 7700K 4c/8t
@@ -284,12 +284,12 @@ More hardware I should buy:
 - CPU: Probably an AMD Ryzen 3900X (12c/24t) or 3950X (16c/32t), assuming you can run this setup on them (some conflicting info)
 - MOBO: Something to match the new CPU, preferably with 3 or so M.2 slots for more SSDs for my OS drives
 
-## Important folders in proxmox
+### Important folders in proxmox
 
 - `/etc/pve/qemu-server`: contains the .conf files for your VMs, which you have to manually edit sometimes because the Proxmox interface doesn’t include every possible QEMU option and argument
 - `/var/lib/vz/template/iso`: Proxmox creates this folder out of the box which you can use for disk images such as the Windows ISO, Clover/OpenCore ISO, the macOS ISO, and so on
 
-## Resources used
+### Resources used
 
 This guide is mostly written for myself to help me re-trace my steps. These are some of the resources I used:
 
@@ -299,7 +299,7 @@ This guide is mostly written for myself to help me re-trace my steps. These are 
 - https://github.com/Leoyzen/KVM-Opencore
 - https://dortania.github.io/OpenCore-Desktop-Guide/
 
-## Versions used
+### Versions used
 
 - Proxmox VE 6.1.2
 - Windows 10 1909
