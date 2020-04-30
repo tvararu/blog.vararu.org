@@ -3,7 +3,7 @@
 Install the required version of `node` using `nvm`:
 
 ```bash
-nvm <.nvmrc
+nvm
 ```
 
 Install dependencies:
