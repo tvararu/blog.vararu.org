@@ -10,7 +10,7 @@ These are my notes and a high-level guide for how I run Windows and macOS VMs in
 
 ### What is this and why even bother?
 
-Proxmox VE is a headless Ubuntu-based distro. It comes with QEMU preinstalled, which allows you to run Kernel-based Virtual Machines, or KVMs. KVMs run on a type-1 hypervisor, also known as a native or bare-metal hypervisor. Proxmox also comes with a web interface to configuring and managing your virtual machines.
+Proxmox VE is a headless Ubuntu-based distro. It comes with QEMU preinstalled, which allows you to run Kernel-based Virtual Machines, or KVMs. KVMs run on a type-1 hypervisor, also known as a native or bare-metal hypervisor. Proxmox also comes with a web interface for configuring and managing your virtual machines.
 
 KVMs are interesting because of the fact that they allow near-native performance. In my experience, the CPU/Memory/Disk overhead is imperceivable in normal use, and only visible in benchmarks where it’s anywhere from 0-5%. I would normally frown on using a virtual machine for day to day computing, but when the cost is so low, it starts to make sense.
 
