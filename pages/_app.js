@@ -35,7 +35,8 @@ export default class MyApp extends App {
           }
 
           pre {
-            overflow-y: scroll;
+            overflow: hidden;
+            word-wrap: break-word;
             background: #2f3640;
             padding: 1rem;
             color: #ffffff;
