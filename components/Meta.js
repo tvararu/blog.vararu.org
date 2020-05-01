@@ -11,6 +11,7 @@ const Meta = ({ title, date, description }) => (
   <>
     <Head>
       {title && <title>{title} | blog.vararu.org</title>}
+      {title && <meta name="title" content={title} />}
       {description && <meta name="description" content={description} />}
     </Head>
     {title && <h2>{title}</h2>}
