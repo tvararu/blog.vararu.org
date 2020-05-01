@@ -23,6 +23,7 @@ export default class MyApp extends App {
 
           a {
             color: #273c75;
+            word-wrap: break-word;
           }
 
           a:visited {
