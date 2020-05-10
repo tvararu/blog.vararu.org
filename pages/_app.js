@@ -56,11 +56,6 @@ export default class MyApp extends App {
           }
         `}</style>
         <style jsx>{`
-          header,
-          footer {
-            margin: 2rem 0;
-          }
-
           .title,
           .title:visited {
             color: #0b0c0c;
