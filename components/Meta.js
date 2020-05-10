@@ -1,11 +1,5 @@
 import Head from "next/head";
-
-const formatDate = (iso) =>
-  new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+import Time from "./Time";
 
 const Meta = ({ title, date, description }) => (
   <>
@@ -16,7 +10,7 @@ const Meta = ({ title, date, description }) => (
     </Head>
     {title && <h1>{title}</h1>}
     {title && <hr />}
-    {date && <time dateTime={date}>{formatDate(date)}</time>}
+    {date && <Time iso={date} />}
   </>
 );
 
