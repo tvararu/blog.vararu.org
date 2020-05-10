@@ -1,4 +1,6 @@
 import Meta from "../components/Meta";
+import Comments, { fetchComments } from "../components/Comments";
+export const getServerSideProps = fetchComments(82);
 
 <Meta
   title="Fieldnotes for running Proxmox with Windows and macOS guests"
@@ -304,3 +306,9 @@ This guide is mostly written for myself to help me re-trace my steps. These are 
 - Proxmox VE 6.1.2
 - Windows 10 1909
 - macOS Catalina 10.15.4
+
+<Comments
+  issueId={82}
+  title={"Fieldnotes for running Proxmox with Windows and macOS guests"}
+  comments={props.comments}
+/>
