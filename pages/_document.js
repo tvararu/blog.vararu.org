@@ -111,7 +111,7 @@ const Favicons = () => (
 );
 
 const CustomHead = () => (
-  <NonSpaHead>
+  <Head>
     <link rel="canonical" href="https://blog.vararu.org/" />
 
     <meta property="og:site_name" content="blog.vararu.org" />
@@ -128,7 +128,7 @@ const CustomHead = () => (
     <meta name="twitter:url" content="https://blog.vararu.org/" />
 
     <Favicons />
-  </NonSpaHead>
+  </Head>
 );
 
 class MyDocument extends Document {
@@ -143,6 +143,7 @@ class MyDocument extends Document {
         <CustomHead />
         <body>
           <Main />
+          <NextScript />
         </body>
       </Html>
     );
