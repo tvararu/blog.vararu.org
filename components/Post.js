@@ -5,7 +5,7 @@ const Post = ({ date, title, href }) => (
     <time dateTime={date}>
       {date.slice(5)}/{date.slice(2, 4)}
     </time>{" "}
-    <Link href={href}>
+    <Link href={href} prefetch={false}>
       <a>{title}</a>
     </Link>
   </p>
