@@ -1,6 +1,9 @@
 import Meta from "../components/Meta";
 import Comments, { fetchComments } from "../components/Comments";
 export const getServerSideProps = fetchComments(82);
+export const config = {
+  unstable_runtimeJS: false,
+};
 
 <Meta
   title="Fieldnotes for running Proxmox with Windows and macOS guests"
