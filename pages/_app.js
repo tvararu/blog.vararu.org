@@ -1,5 +1,6 @@
 import App from "next/app";
 import Head from "next/head";
+import Link from "next/link";
 
 export default class MyApp extends App {
   render() {
@@ -70,9 +71,9 @@ export default class MyApp extends App {
         `}</style>
         <main>
           <header>
-            <a href="/" className="title">
-              blog.vararu.org
-            </a>
+            <Link href="/">
+              <a className="title">blog.vararu.org</a>
+            </Link>
           </header>
           <Component {...pageProps} />
           <footer>

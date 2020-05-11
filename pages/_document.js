@@ -1,18 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
-class NonSpaHead extends Head {
-  render() {
-    return (
-      <head {...this.props}>
-        {this.context._documentProps.head}
-        {this.getCssLinks()}
-        {this.context._documentProps.styles || null}
-        {this.props.children}
-      </head>
-    );
-  }
-}
-
 const Favicons = () => (
   <>
     <link
@@ -111,7 +98,7 @@ const Favicons = () => (
 );
 
 const CustomHead = () => (
-  <NonSpaHead>
+  <Head>
     <link rel="canonical" href="https://blog.vararu.org/" />
 
     <meta property="og:site_name" content="blog.vararu.org" />
@@ -128,7 +115,7 @@ const CustomHead = () => (
     <meta name="twitter:url" content="https://blog.vararu.org/" />
 
     <Favicons />
-  </NonSpaHead>
+  </Head>
 );
 
 class MyDocument extends Document {
@@ -143,6 +130,7 @@ class MyDocument extends Document {
         <CustomHead />
         <body>
           <Main />
+          <NextScript />
         </body>
       </Html>
     );
