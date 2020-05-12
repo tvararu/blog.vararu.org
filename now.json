@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "regions": ["lhr1"],
   "routes": [
     {
       "src": "/adding-pushstate-support-mean-seo/",
