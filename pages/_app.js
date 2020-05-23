@@ -26,8 +26,12 @@ export default class MyApp extends App {
             word-wrap: break-word;
           }
 
-          h1 {
+          h1,
+          h2 {
             font-size: 1.17em;
+          }
+
+          h1 {
             margin-bottom: 0;
           }
 
