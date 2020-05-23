@@ -1,0 +1,118 @@
+import Meta from "../components/Meta";
+export const config = {
+  unstable_runtimeJS: false,
+};
+
+<Meta
+  title="Stop building client-side forms"
+  date="2020-05-23"
+  description="Forms are deceptively hard. Client-side forms are 10x harder."
+/>
+
+Forms are deceptively hard. Client-side forms are 10x harder.
+
+The majority of forms that are built in client-side JavaScript frameworks are broken.
+
+## How client-side forms work
+
+JavaScript developers think that client-side forms work like this:
+
+- The user stumbles on your form, which is rendered on the client using JavaScript
+- The user fills the form in
+- They submit the form
+- The client picks up the submit event and preventDefaults it
+- The client sends a POST request to the API
+- The user sees a loading spinner
+- The request comes back
+- The client shows validation errors, or successfully moves the user to the next step in their journey
+
+That’s a fantasy.
+
+In reality, client-side forms work like this:
+
+- The user stumbles on your form, which is rendered on the client using JavaScript
+- Not so fast, first you need to download a minimum of 15KB for formik.js, or 26KB if it’s based on redux-form, possibly 70KB for moment.js if the form contains a single date-related validation, maybe 30KB of rx.js to include observable support, along with who knows how many polyfills
+- The form will probably fail to render in Safari at this stage because it isn’t Chrome and nobody tests in it
+- Or worse, the form will render on the server, but the [JavaScript will fail to run](https://kryogenix.org/code/browser/everyonehasjs.html), leading to a user that will fill in an entire form only to be met with an inert submit button at the end with no option but to refresh and lose their work
+- The user fills the form in
+- The client might do some live or in-place validation, which is annoying and [commonly regarded as a bad user experience](https://adamsilver.io/articles/live-validation-is-problematic/)
+- While doing live validation, the form is [likely to prevent copy and pasting](https://www.howtogeek.com/251807/how-to-enable-pasting-text-on-sites-that-block-it/), or [mess up the user’s cursor position](https://github.com/facebook/react/issues/955) when they use the arrow keys to insert text at arbitrary places, or stop the user from writing certain characters by not letting them to type them at all
+- They submit the form
+- This is the point where, often, nothing happens, because the JavaScript failed to initialise, or the API is taking a while to respond and there’s no loading spinner, or there’s a validation error somewhere in the form but out of view, or the way the user submitted the form (keyboard, enter key, mouse click, automatically via their password manager) was unanticipated by the developer
+- Sometimes, the user has lost their internet connection while filling in the form because they’re on a train with a spotty Wi-Fi connection, and now your submit button does nothing but trigger an infinite loading spinner, or worse, it deletes all their work by closing the form without persisting what the user has typed
+- The client picks up the submit event and preventDefaults it
+- The client might do some more validation, which is worthless because the server needs to re-validate everything anyway because the server can’t trust the client and the client can’t validate for everything the server can such as uniqueness of email addresses; even if the client eagerly validates for example for email address uniqueness, you still need to revalidate on submit, so it’s pointless
+- The client sends a POST request to the API
+- Yup, you bet this single AJAX call is built with redux-saga 5KB, async.js 7KB, isomorphic-fetch 3KB, swr.js 3KB, an async/await Babel plugin and polyfill that took someone 1 week to configure and a promise polyfill for good measure
+- The user sees a loading spinner (5KB)
+- If the request doesn’t come back, and the developers thought about it, the user might get a message, but the only messages that usually occur at this stage are red ones hidden in the dev console
+- The request comes back
+- The client shows validation errors, or successfully moves the user to the next step in their journey
+
+If you do not believe this to be the reality, use the web for a week with either Internet Explorer 11 or Safari and an AdBlocker. Keep your dev console open and look out for JavaScript errors.
+
+## How old-school vanilla forms work
+
+An old-school, `<form method="post">` tag works like this:
+
+- The user stumbles on your form, which is server-rendered
+- The user fills the form in
+- They submit the form
+- The browser sends a POST request to the web server
+- The server sends the user to the same page with validation errors, or to the next step in their journey
+
+Now let’s try to break it:
+
+- The user stumbles on your form, which is server-rendered
+- If the web server is down, tough luck, I guess the user is going to do something else?
+- The user fills the form in
+- They submit the form
+- The browser sends a POST request to the web server
+- If their connection is bad, they might see a “You’re offline” message from their browser, but all their work is still in flight; they can refresh the page when they regain connectivity to continue submitting, or press the back button and retain their answers so they can try later, all without any additional work from the developer
+- The server sends the user to the same page with validation errors, or to the next step in their journey
+
+Vanilla forms are much harder to break. There’s just far less going on when there’s only 1 request and no dynamic client-side code running amok.
+
+Your precious and bespoke in-place validations, state management, async querying, offline fallbacks, are not necessary or actively harmful most of the time.
+
+Vanilla forms already implement the most important feature out of the box: they don’t lose the user’s state when the user loses connectivity or your server goes down.
+
+## “But my website is special and I need client-side forms”
+
+Go nuts then, spend 10x more effort building robust client-side forms.
+
+But I doubt you or your users need them for every form in your app.
+
+Almost every website has forms. Only a very tiny fraction of them need to be client-side rendered forms.
+
+Here are some examples where client-side forms probably make sense:
+
+- Comments inside Google Docs
+- Instant messaging or web chat
+- Soundcloud or sites with a persistent music or media background
+
+Even then, in the case of Soundcloud, they could still `target=“_blank”` their infrequently accessed settings page and render those pages as a multi-page app with vanilla forms while the music keeps playing uninterrupted in the main tab.
+
+Here are some forms that thankfully are implemented as vanilla-first, and optionally progressively enhance to something nicer:
+
+- The search box for Google, DuckDuckGo, YouTube, Amazon
+- All of the services I’ve used via GOV.UK
+- Every single page on GitHub
+
+Finally, examples of forms I’ve encountered that had no business being client-side rendered and broke for me:
+
+- The admin panel written for an older Sky broadband router, proudly written in Angular 1, where none of the forms did anything, with or without JavaScript on a modern browser
+- The sign up form on Interactive Brokers which asked me for 2 screens worth of data and then did nothing when I submitted in Safari
+- Editing your profile information on the Twitter, which [discards your edits if you submit the form when offline](https://mobile.twitter.com/tvararu/status/1261039892676689921)
+
+## Conclusions
+
+Client-side frameworks can save you a lot of time, but it’s for nothing if you then spend all that time on rebuilding every part of the web platform.
+
+Next.js should have better form support.
+
+Every single frontend developer should pick up a server-side framework and learn how to build normal web forms. They work better for users and are easier to build.
+
+I recommend Ruby on Rails. As a friend says, it is “criminally underrated.”
+
+_Thanks to [Adam Silver](https://adamsilver.io) for reading drafts of this._
