@@ -1,0 +1,191 @@
+import Meta from "components/Meta";
+export const config = {
+  unstable_runtimeJS: false,
+};
+
+<Meta
+  title="First impressions with Blitz.js"
+  date="2020-06-07"
+  description="Trying out a Rails-like modern JS framework"
+/>
+
+A couple of weeks ago, I stumbled on a thread of recommendations for Rails-like frameworks that are built with JavaScript.
+
+JavaScript does not have a “main framework” like Ruby on Rails. The ecosystem is fractured. Most Node.js applications are hand-rolled using a combination of different libraries, frameworks, and conventions depending on what they are meant to accomplish. This is both a strength and a weakness, but that’s a topic for another post.
+
+Over the years, there have been a few contenders, notably [Sails](https://sailsjs.com) and [Meteor](https://www.meteor.com). While they both had their interesting ideas, they fell short of being serious contenders for the end-all framework in the JS ecosystem. I invested pretty heavily into Meteor, but it did not reach a critical mass of adoption, and is now largely forgotten.
+
+Most recently, [Next](https://github.com/vercel/next.js) has been gaining traction as the main JavaScript framework. I’ve used it a fair bit for some projects, and I like that it’s a React framework that does everything out of the box: code-splitting, server-side rendering, serverless, TypeScript, and many more things.
+
+But despite the cool things that Next does, there’s still a huge swath of functionality it doesn’t cover on its own. APIs, database querying and migrations are left as an exercise for the user.
+
+## Blitz
+
+[Blitz is “inspired by Ruby on Rails”](https://blitzjs.com) and takes the approach of piecing together existing technologies into a cohesive full-stack framework. It uses Next and [Prisma](https://www.prisma.io) underneath.
+
+I followed the [Blitz getting started tutorial](https://blitzjs.com/docs/getting-started) and used their `blitz new myAppName` command to generate a new project.
+
+```bash
+test-blitz
+├── app
+│   ├── components
+│   │   └── ErrorBoundary.tsx
+│   ├── layouts
+│   ├── pages
+│   │   ├── _app.tsx
+│   │   ├── _document.tsx
+│   │   └── index.tsx
+│   └── projects
+│       ├── components
+│       │   └── ProjectForm.tsx
+│       ├── mutations
+│       │   ├── createProject.ts
+│       │   ├── deleteProject.ts
+│       │   └── updateProject.ts
+│       ├── pages
+│       │   └── projects
+│       │       ├── [projectId]
+│       │       │   └── edit.tsx
+│       │       ├── [projectId].tsx
+│       │       ├── index.tsx
+│       │       └── new.tsx
+│       └── queries
+│           ├── getProject.ts
+│           └── getProjects.ts
+├── blitz.config.js
+├── db
+│   ├── db.sqlite
+│   ├── index.ts
+│   ├── migrations
+│   │   ├── 20200607101551-add-project-model
+│   │   │   ├── README.md
+│   │   │   ├── schema.prisma
+│   │   │   └── steps.json
+│   │   ├── 20200607103025-add-question-and-choice-models
+│   │   │   ├── README.md
+│   │   │   ├── schema.prisma
+│   │   │   └── steps.json
+│   │   └── migrate.lock
+│   └── schema.prisma
+```
+
+The project structure is sane, and I got pretty quickly accustomed to where you’re meant to keep components, or database-logic which are called queries and mutations, borrowing from the GraphQL world, but not actually using GraphQL from what I can tell. The pages follow Next.js naming conventions that I’m already used to.
+
+The architecture they use is interesting; the initial server-side requests seamlessly run both client-code and server-code, while client-side rendered pages interact with the server-side code via an auto-generated JSON API.
+￼
+
+<img
+  src="/assets/blitz-architecture-diagram.png"
+  alt="Blitz architecture diagram, from their
+website"
+/>
+
+This means that from a developer’s perspective, there’s not much thinking about “where the code will run,” the framework handles that part. This eliminates some of the “split-brain” thinking I had to do when working with Meteor, where I always had to be conscious of code which runs on the client (against a fake database, MiniMongo) and code that runs against the server. Blitz is more straightforward.
+
+The Prisma stuff I was less impressed with. I don’t know why .prisma files have to have their own DSL for which I have to install another one-off language package in my editor. Rails can manage with a schema.rb which is written in Ruby with special functions, and migration files that are also written in plain Ruby, where you can run queries or perform bits of logic in the same code you write in your regular application. It’s unclear how I could use Prisma migrations to backfill something, which is a common need.
+
+The Blitz docs are at a pretty early stage. I followed their getting started document by adding `Question` and `Choice` models to my schema, ran `blitz db migrate` and launched their `blitz console`. I really like that they are keen to copy `rails console`, which is an invaluable tool for running and maintaining real world Rails apps. However, I was treated to a pretty impenetrable error as soon as I tried it:
+
+```js
+⚡️ > db.question.findMany().then(console.log)
+Promise { <pending> }
+⚡️ > (node:5901) UnhandledPromiseRejectionWarning: Error:
+Invalid `prisma.question.findMany()` invocation in
+repl:1:13
+
+Error occurred during query execution:
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(SqliteFailure(Error { code: Unknown, extended_code: 1 }, Some("no such table: db.Question"))) })
+    at PrismaClientFetcher.request (...)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5901) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+(node:5901) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+```
+
+So looks like my table wasn’t created, but `blitz db migrate` reports `Everything up-to-date`… but with a non-zero exit code. Most likely, I need to run some more `prisma` commands, but I expected the framework to abstract this from me. By basing itself on existing complex tooling with their own ecosystem, namely Next and Prisma, it means that someone working with Blitz needs to know quite a bit about all 3 of the frameworks involved, and who knows what other things that are downstream. There’s a lot of cognitive overhead involved. Finding answers online for bugs situated at the intersection of these technologies is also probably going to be very difficult.
+
+There’s a few other things going on wrong in that `blitz console` call:
+
+- `db.question.findMany().then(console.log)` is definitely not as elegant as `Question.all` from the Rails world
+- The immediate response is a promise, with code running in the background asynchronously
+- The asynchronous code breaks, which spills out into `STDOUT`, covering up my `⚡️ >` where I’m meant to type in the next command in the repl
+- All the Node related warnings are un-actionable (I’m not running `node` directly) and would be just misleading and confusing for newbies
+
+Following along in their docs, there’s a few other things that I find annoying about their console:
+
+```js
+# Create a new Question.
+⚡ > let q
+undefined
+
+⚡ > db.question.create({data: {text: 'What’s new?', publishedAt: new Date()}}).then(res => q = res)
+Promise { <pending> }
+
+# See the entire object
+⚡ > q
+{ id: 1, text: "What’s new?", publishedAt: 2020-04-24T22:08:17.307Z }
+```
+
+Having to create a `let q` variable beforehand, and assigning to it via `.then`… looks painful. I understand the reasoning, because promises and async, but it doesn’t look great to work with, the way `rails console` feels.
+
+I adapted the rest of their tutorial to a `projects` model that their initial `index.tsx` recommends you create, and I was curious to see how they’ve approached building forms.
+
+It looks like this (nested inside a React component):
+
+```js
+<form
+  onSubmit={async (event) => {
+    event.preventDefault();
+
+    try {
+      const question = await createQuestion({
+        data: {
+          text: event.target[0].value,
+          publishedAt: new Date(),
+          choices: {
+            create: [
+              { text: event.target[1].value },
+              { text: event.target[2].value },
+              { text: event.target[3].value },
+            ],
+          },
+        },
+      });
+
+      alert("Success!" + JSON.stringify(question));
+      router.push("/questions/[questionId]", `/questions/${question.id}`);
+    } catch (error) {
+      alert("Error creating question " + JSON.stringify(error, null, 2));
+    }
+  }}
+>
+  <input placeholder="Name" />
+
+  <input placeholder="Choice 1" />
+  <input placeholder="Choice 1" />
+  <input placeholder="Choice 1" />
+
+  <button>Submit</button>
+</form>
+```
+
+No `method` or `action` on the form, just a JS event handler that `.preventDefaults`… [there are a lot of problems with this approach](https://blog.vararu.org/stop-building-client-side-forms).
+
+There’s a few other things that are annoying about their example; no `type` on the inputs, no `label` elements. It’s possible this is done for brevity, but I wish tutorials didn’t include inaccessible code by default. This code will surely end up in production in someone’s app.
+
+Once I ran the application in production mode, I tried it out with JavaScript disabled. There is no progressive enhancement baked into the framework; while there is SSR, presumably for SEO and initial render improvements, the moment JavaScript fails you’re left with useless forms that lose your data when submitted.
+
+￼<video controls muted={true}><source src="/assets/blitz-no-js.mp4" type="video/mp4" />Sorry, your browser doesn’t support embedded MP4 videos.</video>
+
+The last thing I looked at is [deploying to Vercel](https://blitzjs.com/docs/deploy-vercel). Deploying to Vercel is quite simple (literally just `now` in the CLI) since the project is based on Next, but my biggest problem is with the first point:
+
+```js
+- You need a production Postgres database. It's straightforward to set this up on Digital Ocean.
+```
+
+I know, alpha-level docs, but that’s it. Just a link to Digital Ocean, and go figure out which database size, replications, backups, environments you need. Someone who sees this and has never encountered the concept of a “database connection string” is unlikely to
+succeed at the very first point.
+
+Overall, it’s a noble goal to combine the “good parts” of some of the most popular frameworks like Next and Prisma, but it personally makes me feel unsure about adopting such a stack. Those tools are already pretty complicated on their own. You need a team of senior, experienced engineers to manage and debug such a stack, which isn’t the case with Rails.
+
+I’ll see if things change with an eventual 1.0 release.

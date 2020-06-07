@@ -41,6 +41,11 @@ export default class MyApp extends App {
             margin: 0 -1rem;
           }
 
+          video,
+          img {
+            max-width: 100%;
+          }
+
           @media (prefers-color-scheme: dark) {
             body {
               background-color: #0b0c0c;
