@@ -18,7 +18,7 @@
     "test": "cypress run"
   },
   "dependencies": {
-    "@mdx-js/mdx": "^1.6.18",
+    "@mdx-js/mdx": "^1.6.19",
     "@zeit/next-mdx": "1.2.0",
     "next": "^9.5.5",
     "node-fetch": "^2.6.1",
