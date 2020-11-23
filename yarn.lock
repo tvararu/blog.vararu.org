@@ -574,10 +574,10 @@
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.3.tgz#9c088679876f374eb5983f150d4787aa6fb32d7e"
   integrity sha512-FvUupuM3rlRsRtCN+fDudtmytGO6iHJuuRKS1Ss0pG5z8oX0diNEw94UEL7hgDbpN94rgaK5R7sWm6RrSkZuAQ==
 
-"@vercel/build-utils@2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@vercel/build-utils/-/build-utils-2.6.0.tgz#47230acdc2f6a976932707ba423c7245d2e13166"
-  integrity sha512-fxvPrFfPQR7e77QrH2xJfkza3EyFtOa5AdtbWom73Zs5+eyrpetvHHqnzKCfRQFhdTVqOuSDwVoN/uLhMS7tQw==
+"@vercel/build-utils@2.6.1-canary.0":
+  version "2.6.1-canary.0"
+  resolved "https://registry.yarnpkg.com/@vercel/build-utils/-/build-utils-2.6.1-canary.0.tgz#ba549e7817c5a13e9ce271f88db3c3b9432d0d8b"
+  integrity sha512-lwTNPC4xCTeqzdHSsfIzHD5h/SwwcIemA5MDRUVdFEuYyF9X38i5A01ad1l/WedCQDi7IP3Q1IGOJ9g7XKJXOg==
 
 "@vercel/go@1.1.6":
   version "1.1.6"
@@ -4374,12 +4374,12 @@ normalize-url@^4.1.0:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-4.5.0.tgz#453354087e6ca96957bd8f5baf753f5982142129"
   integrity sha512-2s47yzUxdexf1OhyRi4Em83iQk0aPvwTddtFz4hnSSw9dCEsLEGf6SwIO8ss/19S9iBb5sJaOuTvTGDeZI00BQ==
 
-now@^20.1.4:
-  version "20.1.4"
-  resolved "https://registry.yarnpkg.com/now/-/now-20.1.4.tgz#1c771feb2c42d636ae7e7171895ce927b1f4f06b"
-  integrity sha512-EiTJv2DvPlaZk26PxRHi8mtzzqsReuY62uFFEkYLoDLzJbebre0AkRndy3tfQKCLF74nHY1JCF7OsGcngc242Q==
+now@^21.0.1:
+  version "21.0.1"
+  resolved "https://registry.yarnpkg.com/now/-/now-21.0.1.tgz#59d1c61b1c470657b49105c037bf503212d7006a"
+  integrity sha512-5QlbhlL7NkNCYQqUgRpAnXMWyRyMZhsI2hQ7PzWfUrkSazG2RWFmXYRWbU7rAZcpB++Xt5vglqWma9LAGDPGhg==
   dependencies:
-    "@vercel/build-utils" "2.6.0"
+    "@vercel/build-utils" "2.6.1-canary.0"
     "@vercel/go" "1.1.6"
     "@vercel/node" "1.8.5"
     "@vercel/python" "1.2.3"
