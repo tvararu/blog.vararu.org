@@ -1,4 +1,4 @@
-# blog.vararu.org [![CircleCI](https://circleci.com/gh/tvararu/blog.vararu.org.svg?style=svg)](https://circleci.com/gh/tvararu/blog.vararu.org)
+# blog.vararu.org
 
 Install the required version of `node` using `nvm`:
 
