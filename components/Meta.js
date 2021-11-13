@@ -6,6 +6,8 @@ const Meta = ({ title, date, description }) => (
     <Head>
       {title && <title>{title} | blog.vararu.org</title>}
       {title && <meta name="title" content={title} />}
+      {title && <meta name="twitter:title" content={title} />}
+      {title && <meta property="og:title" content={title} />}
       {description && <meta name="description" content={description} />}
     </Head>
     {title && <h1>{title}</h1>}
