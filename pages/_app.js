@@ -39,6 +39,7 @@ export default class MyApp extends App {
             background: #f3f2f1;
             padding: 1rem;
             margin: 0 -1rem;
+            white-space: normal;
           }
 
           video,
