@@ -1,0 +1,106 @@
+import Meta from "components/Meta";
+export const config = {
+  unstable_runtimeJS: false,
+};
+
+<Meta
+  title="How I organise and import new music"
+  date="2021-11-13"
+  description="Using MusicBrainz and Picard"
+/>
+
+The first thing I do is obtain the actual music:
+
+```bash
+$ yt-dlp --extract-audio --playlist-end 21 "https://www.youtube.com/playlist?list=PLRW80bBvVD3Ww-Phqg2KFyDB-roTi54ib"
+```
+
+This command downloads the first 21 items in the playlist for the release of ["Vampire: The Masquerade - Bloodlines (More Music From the Vault)"](https://www.youtube.com/watch?v=L5dcODmclFU&list=PLRW80bBvVD3Ww-Phqg2KFyDB-roTi54ib&index=2) from YouTube and converts them into audio files using [yt-dlp](https://github.com/yt-dlp/yt-dlp).
+
+To populate tags, I use [MusicBrainz Picard](https://picard.musicbrainz.org/):
+
+```bash
+$ picard .
+```
+
+<img
+  src="/assets/musicbrainz-unclustered.png"
+  alt="Screenshot of Picard with unclustered music files"
+/>
+
+After clicking "Cluster," and "Lookup" (which searches based on meta tags, such as album name) or "Scan" (which scans for [AcoustId](https://acoustid.org/) audio fingerprints), what I usually get is the following screenshot, which is all the music in the folder with auto-filled tags and metadata.
+
+<img
+  src="/assets/musicbrainz-looked-up.png"
+  alt="Screenshot of Picard with music files that are clustered and populated with meta data"
+/>
+
+At this stage, I usually specify a `genre` based on my own taxonomy, and drag and drop a high quality album cover from the internet, then hit "Save." This moves the files, with updated metadata, into `~/Music/<Artist>/<Album>/`.
+
+My desktop player, [Lollypop](https://www.fossmint.com/lollypop-a-new-modern-music-player-for-linux/), then automatically picks it up and surfaces it into my Recently added albums.
+
+<img
+  src="/assets/musicbrainz-recently-added.png"
+  alt="Screenshot of Lollypop with thumbnails of three recently added albums"
+/>
+
+The entire `~/Music/` folder is synced via [SyncThing](https://syncthing.net/) to:
+
+- The SD card in my laptop
+- The SD card in my phone
+- An external HDD attached to my home server
+- My NAS, via a nightly backup script from my home server
+
+And that's it. The process of importing takes me about a minute, and syncing happens in seconds.
+
+## Except when it doesn't
+
+Except I lied.
+
+For the above release, the files I downloaded from YouTube were devoid of all id3 tags or meta information, so I had to manually add in an `album` field with the album name. This would normally be enough to get Picard to match it.
+
+In this case, it wasn't enough, because as it turned out, the release itself was not yet on MusicBrainz, which is like a public Wiki for all music. So I had to manually go and [submit it as a release](https://musicbrainz.org/release/a73b6009-d09f-4c24-ae95-9d4def72f4ac). The process was mostly painless, and now everyone else can benefit.
+
+## How I discover music
+
+If I feel like listening to something new, I first ask my friends for suggestions.
+
+I keep a text file called `listen.txt` in a synced folder where I put in ideas for music that I want to add to my library, that I can edit when I'm on the go or don't feel like going through the import process. I also look up artists I already like, look for similar artists, or try to find compilations such as "How to get into X genre/artist."
+
+## Why I don't use Spotify or Apple Music
+
+It took me 10 years to get to this point. I have used in anger multiple streaming solutions, among which: Grooveshark, Google Music, iTunes Match, Apple Music, Spotify, Plex and Plexamp.
+
+Some of these I used for a couple of years without many incidents, but eventually I'd run into issues.
+
+<details>
+  <summary>Up to 1/3 of my music library is not available on mainstream streaming services.</summary>
+  <p>Reasons include:</p>
+  <ul>
+    <li>The LPs were never licensed properly. Such as Exmilitary by Death Grips, which is a bootleg release with copyright issues.</li>
+    <li>The artist hasn't signed up for streaming, or they only stream on one platform and not another. Dr. Dre and Jay-Z did this for years.</li>
+    <li>The version I like is not the streaming release. I like the casette version of Ashes 2 Ashes, Dust 2 Dust by Tommy Wright III, but not the CD reissue.</li>
+    <li>The artist is too niche. Such as <a href="https://grantbeats.bandcamp.com/album/grant">GRANT</a>, which was also removed from Bandcamp, as I was shocked to discover just now. That link is now a 404. I'm lucky I downloaded a copy in time.</li>
+    <li>The release is "weird." Like the radio stations from the classic GTA games. I'm not going on any roadtrip without an offline copy of K-Rose.</li>
+  </ul>
+</details>
+
+<details>
+  <summary>All music streaming services remove things from their library at their own whim.</summary>
+  <p>This is due to copyright issues, licencing agreements, or plain incompetence. Albums I've lost access to at some point include: Cross by Justice (Spotify), Deus Ex: Human Revolution OST (Apple Music), Hitman: Blood Money OST (Apple Music), tracks from albums by Kanye West, Nas, Bones, Amon Tobin.</p>
+  <p>I used to rely on YouTube exclusively for my music, and curated a playlist each year with my favourite 100 tracks from that year. I still have those playlists, and all of them are missing a good quarter to fifth of their tracks:</p>
+  <ul>
+    <li><a href="https://www.youtube.com/playlist?list=PL6gRy56ufyxEUeoUAxKXIFLd8hZLRAtPq">Top 100 2012</a>, now only 77 tracks.</li>
+    <li><a href="https://www.youtube.com/playlist?list=PL6gRy56ufyxE3s4EcsDMv_KHVYd1XiRW0">Top 100 2013</a>, now only 83 tracks.</li>
+    <li><a href="https://www.youtube.com/playlist?list=PL6gRy56ufyxF1z8OMBJh8vOpVu-YQOovy">Top 100 2014</a>, now only 82 tracks.</li>
+  </ul>
+</details>
+
+<details>
+  <summary>They cost £10 per month perpetually.</summary>
+  <p>And it would be worth it, if they fit my needs. But they don't.</p>
+</details>
+
+Add to that countless bugs, feature removals, small annoyances, and situations where I said "I thought I had downloaded all my music for offline listening. Why can't I listen to this one specific track that I feel like listening right now?" So the setup I currently have is entirely based on Libre software, large amounts of removable storage, and offline-first.
+
+And I love it.
