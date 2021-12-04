@@ -37,7 +37,7 @@ export const getStaticProps = async () => {
 const Index = () => <>
   <Meta description="Theodor Vararu's blog." />
 
-  { posts.map(post => <Post {...post} />) }
+  { posts.map(post => <Post key={post.href} {...post} />) }
 </>;
 
 export default Index;
