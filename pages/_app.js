@@ -89,6 +89,12 @@ export default class MyApp extends App {
               border-color: #f3f2f1;
             }
           }
+
+          @media (max-width: 40rem) {
+            body {
+              font-size: 14px;
+            }
+          }
         `}</style>
         <main>
           <header>
