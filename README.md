@@ -1,11 +1,5 @@
 # blog.vararu.org
 
-Install the required version of `node` using `nvm`:
-
-```bash
-nvm
-```
-
 Install dependencies:
 
 ```bash
