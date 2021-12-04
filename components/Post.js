@@ -2,12 +2,22 @@ import Link from "next/link";
 
 const Post = ({ date, title, href }) => (
   <p>
-    <time dateTime={date}>
-      {`${date.slice(2, 4)}/${date.slice(5)}`}
-    </time>{" "}
+    <style jsx>{`
+      p {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      time {
+        margin-left: 0.5rem;
+      }
+    `}</style>
     <Link href={href}>
       <a>{title}</a>
     </Link>
+    <time dateTime={date}>
+      {`${date.slice(2, 4)}/${date.slice(5)}`}
+    </time>
   </p>
 );
 
