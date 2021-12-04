@@ -13,12 +13,14 @@ export default class MyApp extends App {
         <style global jsx>{`
           body {
             color: #0b0c0c;
+            font-family: monospace;
+            font-size: 18px;
             margin: 1rem;
           }
 
           main {
             margin: 0 auto;
-            max-width: 40rem;
+            max-width: 46rem;
           }
 
           a,
@@ -35,8 +37,11 @@ export default class MyApp extends App {
             margin-bottom: 0;
           }
 
-          pre {
+          code, pre {
             background: #f3f2f1;
+          }
+
+          pre {
             padding: 1rem;
             margin: 0 -1rem;
             white-space: pre-wrap;
@@ -45,6 +50,16 @@ export default class MyApp extends App {
           video,
           img {
             max-width: 100%;
+          }
+
+          .title,
+          .title:visited {
+            color: #0b0c0c;
+          }
+
+          hr {
+            border: 2px solid;
+            border-color: #0b0c0c;
           }
 
           @media (prefers-color-scheme: dark) {
@@ -61,21 +76,17 @@ export default class MyApp extends App {
               color: #f499be;
             }
 
-            pre {
+            code, pre {
               background: #000;
             }
-          }
-        `}</style>
-        <style jsx>{`
-          .title,
-          .title:visited {
-            color: #0b0c0c;
-          }
 
-          @media (prefers-color-scheme: dark) {
             .title,
             .title:visited {
               color: #f3f2f1;
+            }
+
+            hr {
+              border-color: #f3f2f1;
             }
           }
         `}</style>
