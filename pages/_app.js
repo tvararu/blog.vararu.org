@@ -110,7 +110,7 @@ export default class MyApp extends App {
               <a href="https://github.com/tvararu/blog.vararu.org">
                 Source code on GitHub
               </a>
-              .
+              . <a href="/rss.xml">RSS</a>.
             </p>
           </footer>
         </main>

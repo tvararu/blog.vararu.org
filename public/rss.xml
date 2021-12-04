@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+
+<channel>
+<title>blog.vararu.org</title>
+<description>Theodor Vararu's blog.</description>
+<language>en-us</language>
+<link>https://blog.vararu.org/rss.xml</link>
+<atom:link href="https://blog.vararu.org/rss.xml" rel="self" type="application/rss+xml" />
+
+<item>
+  <title>How I organise and import new music</title>
+  <link>https://blog.vararu.org/new-music</link>
+  <pubDate>2021-11</pubDate>
+</item>
+
+<item>
+  <title>First impressions with Blitz.js</title>
+  <link>https://blog.vararu.org/blitz</link>
+  <pubDate>2020-06</pubDate>
+</item>
+
+<item>
+  <title>Stop building client-side forms</title>
+  <link>https://blog.vararu.org/stop-building-client-side-forms</link>
+  <pubDate>2020-05</pubDate>
+</item>
+
+<item>
+  <title>Fieldnotes for running Proxmox with Windows and macOS guests</title>
+  <link>https://blog.vararu.org/proxmox</link>
+  <pubDate>2020-04</pubDate>
+</item>
+
+<item>
+  <title>Building my new blog</title>
+  <link>https://blog.vararu.org/new-blog</link>
+  <pubDate>2019-10</pubDate>
+</item>
+
+<item>
+  <title>What to do with software development downtime</title>
+  <link>https://blog.vararu.org/downtime</link>
+  <pubDate>2019-01</pubDate>
+</item>
+
+<item>
+  <title>Creating a Ghost in the Shell screensaver for macOS</title>
+  <link>https://blog.vararu.org/ghost-in-the-screensaver</link>
+  <pubDate>2017-06</pubDate>
+</item>
+
+<item>
+  <title>Accessibility testing tools are lying to you</title>
+  <link>https://blog.vararu.org/lying-a11y-tools</link>
+  <pubDate>2017-06</pubDate>
+</item>
+
+<item>
+  <title>What's WebVR good for?</title>
+  <link>https://blog.vararu.org/why-webvr</link>
+  <pubDate>2017-03</pubDate>
+</item>
+
+<item>
+  <title>A yak shaver's guide to upgrading Ghost from 0.5.9 to 0.11.3</title>
+  <link>https://blog.vararu.org/yak-shaving-ghost</link>
+  <pubDate>2016-11</pubDate>
+</item>
+
+<item>
+  <title>A computer you'll fall in love with</title>
+  <link>https://blog.vararu.org/computer</link>
+  <pubDate>2016-11</pubDate>
+</item>
+
+<item>
+  <title>When to rewrite code from scratch</title>
+  <link>https://blog.vararu.org/rewrite-from-scratch</link>
+  <pubDate>2016-10</pubDate>
+</item>
+
+<item>
+  <title>Operational reasoning considered harmful</title>
+  <link>https://blog.vararu.org/operational-reasoning</link>
+  <pubDate>2015-12</pubDate>
+</item>
+
+<item>
+  <title>let javascript :  haskell?</title>
+  <link>https://blog.vararu.org/let-javascript-haskell</link>
+  <pubDate>2015-02</pubDate>
+</item>
+
+<item>
+  <title>Deploying an app with Facebook Login in 5 minutes</title>
+  <link>https://blog.vararu.org/meteor-sso</link>
+  <pubDate>2015-01</pubDate>
+</item>
+
+<item>
+  <title>Dotfiles!</title>
+  <link>https://blog.vararu.org/dotfiles</link>
+  <pubDate>2014-10</pubDate>
+</item>
+
+<item>
+  <title>WebGL cloth implemented in Famo.us</title>
+  <link>https://blog.vararu.org/famous-cloth</link>
+  <pubDate>2014-10</pubDate>
+</item>
+
+<item>
+  <title>Humble asm.js Bundle</title>
+  <link>https://blog.vararu.org/humble-asm</link>
+  <pubDate>2014-10</pubDate>
+</item>
+
+<item>
+  <title>GitHub Student Developer Pack</title>
+  <link>https://blog.vararu.org/github-pack</link>
+  <pubDate>2014-10</pubDate>
+</item>
+
+<item>
+  <title>Adding HTML5 pushstate support to mean-seo</title>
+  <link>https://blog.vararu.org/mean-seo</link>
+  <pubDate>2014-08</pubDate>
+</item>
+
+</channel>
+</rss>
