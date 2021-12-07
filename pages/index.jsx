@@ -7,6 +7,7 @@ export const config = {
 };
 
 const posts = [
+  { date: "2021-12", title: "First impressions with Remix", href: "/remix" },
   { date: "2021-11", title: "How I organise and import new music", href: "/new-music" },
   { date: "2020-06", title: "First impressions with Blitz.js", href: "/blitz" },
   { date: "2020-05", title: "Stop building client-side forms", href: "/stop-building-client-side-forms" },

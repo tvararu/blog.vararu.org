@@ -9,6 +9,12 @@
 <atom:link href="https://blog.vararu.org/rss.xml" rel="self" type="application/rss+xml" />
 
 <item>
+  <title>First impressions with Remix</title>
+  <link>https://blog.vararu.org/remix</link>
+  <pubDate>2021-12</pubDate>
+</item>
+
+<item>
   <title>How I organise and import new music</title>
   <link>https://blog.vararu.org/new-music</link>
   <pubDate>2021-11</pubDate>
