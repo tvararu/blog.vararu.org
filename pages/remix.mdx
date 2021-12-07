@@ -67,12 +67,14 @@ $ tree -I "node_modules|build"
 ```
 
 So: TypeScript, `npm`, regular CSS files. `client` and `server` entrypoints.
-Dynamic parameters via `$id` in the filename. Looks sensible, but first
-reaction is if this is a full-stack framework, where is the database? Maybe
-it's not "that" kind of full-stack. No tests either, for probably the same
-reason: you can't satisfy everyone in the JS community. I was complaining about
-Prisma being a default in [my Blitz post](/blitz), so maybe it's better this
-way.
+Dynamic parameters via `$id` in the filename.
+
+Looks sensible, but first reaction is if this is a full-stack framework, where
+is the database? Maybe it's not "that" kind of full-stack.
+
+No tests either, for probably the same reason: you can't satisfy everyone in
+the JS community. I was complaining about Prisma being a default in [my Blitz
+post](/blitz), so maybe it's better this way.
 
 ## SPA woes
 
@@ -89,8 +91,8 @@ single page application? Because I'm still holding out for the hope that, one
 day, someone marries the developer experience of using React with *optional
 client-side rendering by default*.
 
-What am I talking about? Single language, sane componenting, a good DSL for
-views, hot code refreshes, predictable UI, types and props, pure functions,
+What am I on about? Single language, sane componenting, a good DSL for views,
+hot code refreshes, predictable UI, types and props, pure functions,
 scoped/purged/shaken/stirred CSS, but **without a 200KB bundle**. The accepted
 default nowadays is that every application should start out as a single-page
 application. After years of trying to make that work, I now firmly believe it
@@ -142,8 +144,8 @@ And holy smokes, they actually work without JavaScript! And it has errors that
 ALSO work without JavaScript. Dear God, finally. I've been wanting this for
 ages.
 
-I like the design of the `export const action` route action API. Not magical,
-colocated with the view. Trivial to test, just a pure function. Really nice.
+I like the design of the route action API. Not magical, colocated with the
+view. Trivial to test, just a pure function. Really smart.
 
 Then the tutorial ends. The next thing I went looking for is some configuration
 flag to completely switch off client-side JavaScript in the production app,
@@ -152,6 +154,7 @@ while maintaining it for hot code reloading and other development concerns.
 I found that the other tutorial, the [Jokes
 app](https://remix.run/docs/en/v1/tutorials/jokes), does have some database
 setup instructions. I still don't know if I like Prisma, but it's a choice.
+Props for showing users of the framework how to do it regardless.
 
 And I found what I was looking for as well! [Clean, clear instructions for how
 to run a Remix project without client-side
@@ -161,16 +164,8 @@ JavaScript](https://remix.run/docs/en/v1/tutorials/jokes#javascript):
 > actually is pretty significant. Our entire app can work without JavaScript on
 > the page at all. This is because Remix leverages the platform so well for us.
 
-> Why does it matter that our app works without JavaScript? Is it because we're
-> worried about the 0.002% of users who run around with JS disabled? Not
-> really. It's because not everyone's connected to your app on a lightning-fast
-> connection and sometimes JavaScript takes some time to load or fails to load
-> at all. Making your app functional without JavaScript means that when that
-> happens, your app still works for your users even before the JavaScript
-> finishes loading.
-
-Wow. All you do is just remove `<Scripts />` from the root component. And it's
-in the official docs, not a hack.
+Wow. All you do is just add or remove `<Scripts />` from the root component.
+And it's in the official docs, not a hack.
 
 ## Conclusions
 
