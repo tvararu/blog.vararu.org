@@ -26,7 +26,7 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "cypress": "^9.1.0",
+    "cypress": "^9.2.1",
     "now": "^21.0.1",
     "start-server-and-test": "^1.14.0"
   }
