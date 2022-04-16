@@ -1,0 +1,70 @@
+import Meta from "components/Meta";
+export const config = {
+  unstable_runtimeJS: false,
+};
+
+<Meta
+  title="Pause media when unplugging headphones on Linux"
+  date="2022-04-16"
+  description="Using acpid events and playerctl / dbus"
+/>
+
+I've had a couple of unfortunate accidents where I removed my headphones from
+my laptop only to have the entire cafe/coworking/airplane cabin rudely
+introduced to my (patrician) music tastes.
+
+To work around this, you can use a combination of `acpid` and `playerctl` or
+`dbus`:
+
+```bash
+$ yay -S acpid playerctl
+```
+
+`playerctl` is just a convenience wrapper for [MPRIS media
+events](https://wiki.archlinux.org/title/MPRIS). You can skip installing it if
+you prefer the long `dbus-send` commands that are listed in the wiki.
+
+`acpid` is a daemon that outputs messages whenever things happen relating to
+power or various buttons/lids on your device:
+
+```bash
+$ acpi_listen
+battery PNP0C0A:00 00000080 00000001
+cd/play CDPLAY 00000080 00000000 K
+cd/play CDPLAY 00000080 00000000 K
+jack/headphone HEADPHONE unplug
+jack/headphone HEADPHONE plug
+jack/headphone HEADPHONE unplug
+jack/headphone HEADPHONE plug
+button/lid LID close
+button/lid LID open
+battery PNP0C0A:00 00000080 00000001
+```
+
+To subscribe to these events and run scripts whenever one occurs, you can
+create a file in `/etc/acpi/events`, for example:
+
+```bash
+$ sudo vim /etc/acpi/events/stop-music-when-headphones-unplug
+event=jack/headphone HEADPHONE unplug
+action=su - USER -c "env DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus playerctl pause"
+```
+
+For a `dbus` related command like `playerctl`, you'll have to `su - YOUR_USER`
+also export the display session and the `DBUS_SESSION_BUS_ADDRESS`.
+
+Start `acpid`:
+
+```bash
+$ sudo systemctl enable --now acpid
+```
+
+And that should be it, when you unplug your headphones `journalctl -fu acpid`
+should show a message:
+
+```bash
+Apr 16 16:11:30 fwk su[373192]: (to deity) root on none
+Apr 16 16:11:30 fwk su[373192]: pam_unix(su-l:session): session opened for user deity(uid=1000) by (uid=0)
+Apr 16 16:11:30 fwk su[373192]: pam_unix(su-l:session): session closed for user deity
+Apr 16 16:11:30 fwk root[373220]: ACPI group/action undefined: jack/headphone / HEADPHONE
+```
