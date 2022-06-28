@@ -20,7 +20,7 @@
   "dependencies": {
     "@mdx-js/mdx": "^2.1.1",
     "@zeit/next-mdx": "1.2.0",
-    "next": "^12.1.6",
+    "next": "^12.2.0",
     "node-fetch": "^2.6.7",
     "react": "^18.1.0",
     "react-dom": "^18.1.0"
