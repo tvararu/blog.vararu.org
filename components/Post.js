@@ -16,7 +16,7 @@ const Post = ({ date, title, href }) => (
       <a>{title}</a>
     </Link>
     <time dateTime={date}>
-      {`${date.slice(2, 4)}/${date.slice(5)}`}
+      {`${date.slice(0, 4)}/${date.slice(5)}`}
     </time>
   </p>
 );
