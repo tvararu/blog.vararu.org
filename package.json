@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": "https://github.com/tvararu/blog.vararu.org",
   "engines": {
-    "node": ">=18 <19"
+    "node": ">=16 <17"
   },
   "private": true,
   "scripts": {
